@@ -1,0 +1,25 @@
+@charset "UTF-8";
+/* CSS Document */
+
+h1
+{
+/*	color: pink;*/
+	text-align: center;
+}
+
+html, body, select
+{
+	text-align: center;
+	background-color: black;
+	color: #1DB954;
+}
+
+img {
+	width: 280px;
+	float: right;
+	padding: 50px 50px 0px 50px;
+}
+
+table {
+	margin-left: auto;
+}

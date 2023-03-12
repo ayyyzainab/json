@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Song List</title>
+	<script src="jquery-3.6.3.min.js"></script>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <h1>Welcome To Your Spotify Song List</h1>
+	<img src="spotify.png">
+    <table id="songListTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Artists</th>
+          <th>Genres</th>
+          <th>Released</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script>
+//		$(document).ready(function(){
+//			$.getJSON("songList.json", 
+//			function(songList){
+//				mySongList = JSON.stringify(songList);
+//				document.write(mySongList);
+//			});
+//		});
+		
+      fetch("songList.json")
+        .then(response => response.json())
+        .then(songlist => {
+          let tableBody = document.querySelector("#songListTable tbody");
+
+          songlist.forEach(song => {
+            let row = document.createElement("tr");
+			  
+            let title = document.createElement("td");
+            title.textContent = song.title;
+            row.appendChild(title);
+			  
+            let artists = document.createElement("td");
+			artists.textContent = song.artists;
+            row.appendChild(artists);
+			  
+            let genres = document.createElement("td");
+			genres.textContent = song.genres;
+            row.appendChild(genres);
+			  
+            let released = document.createElement("td");
+			released.textContent = song.released;
+            row.appendChild(released);
+            tableBody.appendChild(row);
+          });
+        })
+		
+		
+    </script>
+	<br>
+	<select id="genre-select"></select>
+	<script>
+	  fetch("songList.json")
+		.then(response => response.json())
+		.then(songlist => {
+		  let genres = new Set();
+		  for (const song of songlist) {
+			for (const genre of song.genres) {
+			  genres.add(genre);
+			}
+		  }
+		  for (const genre of genres) {
+			document.getElementById("genre-select").innerHTML += `<option value="${genre}">${genre}</option>`;
+		  }
+		  
+		  document.getElementById("genre-select").addEventListener("change", function() {
+        	const selectedGenre = this.value;
+        	let filteredSongs = songlist.filter(song => song.genres.includes(selectedGenre));
+        	let filteredSongsHTML = "";
+        	for (const song of filteredSongs) 
+			{
+          		filteredSongsHTML += `<p>${song.title} - ${song.artists.join(", ")} (${song.released})</p>`;
+        	}
+        	document.getElementById("filtered-songs").innerHTML = filteredSongsHTML;
+      });
+    });
+	</script>
+	  
+	<div id = "filtered-songs"></div>
+	
+  </body>
+</html>
